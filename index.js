@@ -10,7 +10,14 @@ const app = express();
 app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/api/inngest", serve({ client: inngest, functions }));
+app.use(
+  "/api/inngest",
+  serve({
+    client: inngest,
+    functions,
+    signingKey: process.env.INNGEST_SIGNING_KEY,
+  })
+);
 
 app.use("/gen-script", async (req, res, next) => {
   try {
