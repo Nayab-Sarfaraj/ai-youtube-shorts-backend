@@ -52,7 +52,10 @@ app.post("/gen-video", async (req, res, next) => {
 
 // const apiRoutes = require("./routes/api");
 app.use("/api", apiRoutes);
-
+app.get("/", (req, res) => {
+  res.send("API is running...");
+}
+);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`SERVER RUNNING ON PORT ${PORT}`));
