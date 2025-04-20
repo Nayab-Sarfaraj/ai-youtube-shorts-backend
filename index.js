@@ -5,6 +5,7 @@ import { serve } from "inngest/express";
 import getScript from "./utils/getScript.js";
 import pool from "./config/pgConfig.js";
 import { functions, inngest } from "./inngest/index.js";
+import apiRoutes from "./routes/api.js";
 dotenv.config();
 const app = express();
 app.use(cors({ origin: "*", credentials: true }));
@@ -18,6 +19,8 @@ app.use(
     signingKey: process.env.INNGEST_SIGNING_KEY,
   })
 );
+
+
 
 app.use("/gen-script", async (req, res, next) => {
   try {
@@ -46,6 +49,10 @@ app.post("/gen-video", async (req, res, next) => {
     return res.status(500).json({ error: error.message });
   }
 });
+
+// const apiRoutes = require("./routes/api");
+app.use("/api", apiRoutes);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`SERVER RUNNING ON PORT ${PORT}`));
