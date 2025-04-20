@@ -3,7 +3,11 @@ import { Inngest } from "inngest";
 import { GenerateImageScript } from "../config/geminiConfig.js";
 import { createClient } from "@deepgram/sdk";
 import pool from "../config/pgConfig.js";
-export const inngest = new Inngest({ id: "my-app" });
+console.log(process.env.INNGEST_EVENT_KEY);
+export const inngest = new Inngest({
+  id: "my-app",
+  eventKey: process.env.INNGEST_EVENT_KEY,
+});
 
 const BASE_URL = "https://aigurulab.tech";
 const ImagePromptScript = `Generate Image prompt of {style} style with all the details for 30 second  : script : {script}
