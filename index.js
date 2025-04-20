@@ -6,8 +6,10 @@ import getScript from "./utils/getScript.js";
 import pool from "./config/pgConfig.js";
 import { functions, inngest } from "./inngest/index.js";
 import apiRoutes from "./routes/api.js";
+import dbConnect from "./config/db.js";
 dotenv.config();
 const app = express();
+dbConnect()
 app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -26,6 +26,7 @@
     "express": "^5.1.0",
     "inngest": "^3.34.4",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.2",
     "pg": "^8.14.1",
     "together-ai": "^0.13.0"
   },
