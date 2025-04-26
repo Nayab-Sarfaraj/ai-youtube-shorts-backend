@@ -16,6 +16,7 @@ const videoSchema = new mongoose.Schema(
       required: true,
     },
     status: { type: String, default: "pending" },
+    videoUrl: { type: String, default: "" },
   },
   {
     timestamps: true, // createdAt and updatedAt auto-managed

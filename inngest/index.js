@@ -27,7 +27,7 @@ export const GenerateVideoData = inngest.createFunction(
   { id: "generate-video-data" },
   { event: "generate-video-data" },
   async ({ event, step }) => {
-    const { script, prompt, voice, videoStyle } = event?.data;
+    const { script, prompt, voice, videoStyle, userId, title } = event?.data;
 
     const GenerateAudioFile = await step.run("GenerateAudioFile", async () => {
       const result = await axios.post(
@@ -109,12 +109,12 @@ export const GenerateVideoData = inngest.createFunction(
         const captionJson = GenerateCaption;
         const images = GenerateImages;
         const video = await Video.create({
-          title: "random",
+          title,
           script,
           prompt,
           voice,
           videoStyle,
-          createdBy: "68090b4e2bb68d4e7502a8ea",
+          createdBy: userId,
           audioUrl,
           captionJson,
           images,
