@@ -27,7 +27,7 @@ export const GenerateVideoData = inngest.createFunction(
   { id: "generate-video-data" },
   { event: "generate-video-data" },
   async ({ event, step }) => {
-    const { script, prompt, voice, videoStyle, userId, title } = event?.data;
+    const { script, prompt, voice, videoStyle, userId } = event?.data;
 
     const GenerateAudioFile = await step.run("GenerateAudioFile", async () => {
       const result = await axios.post(
@@ -109,7 +109,6 @@ export const GenerateVideoData = inngest.createFunction(
         const captionJson = GenerateCaption;
         const images = GenerateImages;
         const video = await Video.create({
-          title,
           script,
           prompt,
           voice,
@@ -125,7 +124,23 @@ export const GenerateVideoData = inngest.createFunction(
       }
     });
 
-    return saveInDB;
+    const renderVideo = step.run("renderVideo", async () => {
+      let video = saveInDB;
+      const { data } = await axios.post(
+        // "https://fastapi-project-316366938835.us-central1.run.app/render"
+        "http://127.0.0.1:8000/render",
+        { story_audio: video.audioUrl, images: video.images }
+      );
+      console.log(data);
+      video = await Video.findById(video._id);
+      console.log(video);
+      video.videoUrl = data.video_url;
+      video.status = "completed";
+      await video.save();
+      return video;
+    });
+
+    return renderVideo;
   }
 );
 
