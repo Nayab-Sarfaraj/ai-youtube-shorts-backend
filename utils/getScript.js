@@ -19,8 +19,9 @@ const getScript = async (prompt) => {
   const result = await generateScript.sendMessage(PROMPT);
   let resp = result?.response?.text();
   resp = JSON.parse(resp);
+  console.log(resp.scripts[0].content);
 
-  return resp;
+  return resp.scripts[0].content;
 };
 
 export default getScript;

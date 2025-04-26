@@ -1,8 +1,8 @@
+import { createClient } from "@deepgram/sdk";
 import axios from "axios";
 import { Inngest } from "inngest";
 import { GenerateImageScript } from "../config/geminiConfig.js";
-import { createClient } from "@deepgram/sdk";
-import pool from "../config/pgConfig.js";
+import Video from "../schema/videoSchema.js";
 console.log(process.env.INNGEST_EVENT_KEY);
 export const inngest = new Inngest({
   id: "my-app",
@@ -27,10 +27,7 @@ export const GenerateVideoData = inngest.createFunction(
   { id: "generate-video-data" },
   { event: "generate-video-data" },
   async ({ event, step }) => {
-    // const { script, topic, title, caption, videoStyle, voice, recordId } =
-    //   event?.data;
-
-    const { script, voice, videoStyle } = event?.data;
+    const { script, prompt, voice, videoStyle } = event?.data;
 
     const GenerateAudioFile = await step.run("GenerateAudioFile", async () => {
       const result = await axios.post(
@@ -107,33 +104,24 @@ export const GenerateVideoData = inngest.createFunction(
     });
 
     const saveInDB = await step.run("saveInDB", async () => {
-      const client = await pool.connect();
       try {
-        const query = `INSERT INTO VIDEOS ( script, video_style, voice, caption,  audio_url,
-          caption_json, status,images ) VALUES ($1, $2, $3, $4, $5, $6, $7,$8) RETURNING  *;`;
-        const caption = "";
-        const audio_url = GenerateAudioFile;
-        let caption_json = GenerateCaption;
+        const audioUrl = GenerateAudioFile;
+        const captionJson = GenerateCaption;
         const images = GenerateImages;
-        const status = "completed";
-
-        const values = [
+        const video = await Video.create({
+          title: "random",
           script,
-          videoStyle,
+          prompt,
           voice,
-          caption,
-          audio_url,
-          JSON.stringify(caption_json),
-          status,
+          videoStyle,
+          createdBy: "68090b4e2bb68d4e7502a8ea",
+          audioUrl,
+          captionJson,
           images,
-        ];
-        const result = await client.query(query, values);
-        return { success: true, videoId: result.rows[0] };
+        });
+        return video;
       } catch (error) {
-        console.log(error);
-        return "Error in saving";
-      } finally {
-        client.release();
+        return error?.message;
       }
     });
 
