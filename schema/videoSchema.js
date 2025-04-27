@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
     prompt: { type: String, required: true },
     script: { type: String, required: true },
     videoStyle: { type: String, required: true },

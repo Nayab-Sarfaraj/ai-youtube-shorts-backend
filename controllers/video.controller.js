@@ -23,7 +23,7 @@ export const getVideos = async (req, res) => {
 
 export const generateVideoContent = async (req, res) => {
   try {
-    const { prompt, voice, videoStyle, title } = req.body;
+    const { prompt, voice, videoStyle } = req.body;
     const userId = req.user._id;
     if (!prompt || !voice || !videoStyle)
       return res
@@ -33,7 +33,7 @@ export const generateVideoContent = async (req, res) => {
 
     const result = await inngest.send({
       name: "generate-video-data",
-      data: { script, prompt, voice, videoStyle, userId, title },
+      data: { script, prompt, voice, videoStyle, userId },
     });
     return res.status(200).json({ message: "ok", result });
   } catch (error) {
