@@ -127,8 +127,8 @@ export const GenerateVideoData = inngest.createFunction(
     const renderVideo = step.run("renderVideo", async () => {
       let video = saveInDB;
       const { data } = await axios.post(
-        // "https://fastapi-project-316366938835.us-central1.run.app/render"
-        "http://127.0.0.1:8000/render",
+        "https://fastapi-project-316366938835.us-central1.run.app/render",
+        // "http://127.0.0.1:8000/render",
         { story_audio: video.audioUrl, images: video.images }
       );
       console.log(data);
