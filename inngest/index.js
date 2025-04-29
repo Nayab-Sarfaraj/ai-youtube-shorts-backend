@@ -3,6 +3,7 @@ import axios from "axios";
 import { Inngest } from "inngest";
 import { GenerateImageScript } from "../config/geminiConfig.js";
 import Video from "../schema/videoSchema.js";
+import render_video from "../render.js";
 console.log(process.env.INNGEST_EVENT_KEY);
 export const inngest = new Inngest({
   id: "my-app",
@@ -10,10 +11,10 @@ export const inngest = new Inngest({
 });
 
 const BASE_URL = "https://aigurulab.tech";
-const ImagePromptScript = `Generate Image prompt of {style} style with all the details for 30 second  : script : {script}
+const ImagePromptScript = `Generate Image prompt of {style} style with all the details for 10 second  : script : {script}
 - Just Give specifying image prompt depends on the story line
 - do not give camera angle image prompt
-- Follow the Following schema and return JSON data (Max 4-5 Images)
+- Follow the Following schema and return JSON data (Max 1-2 Images)
 
 [
     {
@@ -126,17 +127,15 @@ export const GenerateVideoData = inngest.createFunction(
 
     const renderVideo = step.run("renderVideo", async () => {
       let video = saveInDB;
-      const { data } = await axios.post(
-        "https://fastapi-project-316366938835.us-central1.run.app/render",
-        // "http://127.0.0.1:8000/render",
-        { story_audio: video.audioUrl, images: video.images }
+      const url = await render_video(
+        video.audioUrl,
+        video.images,
+        video.captionJson
       );
-      console.log(data);
       video = await Video.findById(video._id);
-      console.log(video);
-      video.videoUrl = data.video_url;
-      video.status = "completed";
+      video.videoUrl = url;
       await video.save();
+
       return video;
     });
 

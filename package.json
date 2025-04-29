@@ -18,6 +18,8 @@
     "@google/generative-ai": "^0.24.0",
     "@neondatabase/serverless": "^1.0.0",
     "@prisma/client": "^6.6.0",
+    "@remotion/lambda": "^4.0.291",
+    "@supabase/supabase-js": "^2.49.4",
     "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
@@ -25,10 +27,14 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "ffmpeg": "^0.0.4",
+    "fluent-ffmpeg": "^2.1.3",
     "inngest": "^3.34.4",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
+    "ora": "^8.2.0",
     "pg": "^8.14.1",
+    "remotion": "^4.0.291",
     "together-ai": "^0.13.0"
   },
   "devDependencies": {
