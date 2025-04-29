@@ -3,7 +3,7 @@ import {
   generationConfig,
   model,
 } from "../config/geminiConfig.js";
-const SCRIPT_PROMPT = `write a  script for 10 Seconds video on Topic: {topic}.  
+const SCRIPT_PROMPT = `write a  script for 30 Seconds video on Topic: {topic}.  
 • Give me response in JSON format and follow the schema  
 
 {  

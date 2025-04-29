@@ -11,10 +11,10 @@ export const inngest = new Inngest({
 });
 
 const BASE_URL = "https://aigurulab.tech";
-const ImagePromptScript = `Generate Image prompt of {style} style with all the details for 10 second  : script : {script}
+const ImagePromptScript = `Generate Image prompt of {style} style with all the details for 30 second  : script : {script}
 - Just Give specifying image prompt depends on the story line
 - do not give camera angle image prompt
-- Follow the Following schema and return JSON data (Max 1-2 Images)
+- Follow the Following schema and return JSON data (Max 4-5 Images)
 
 [
     {
