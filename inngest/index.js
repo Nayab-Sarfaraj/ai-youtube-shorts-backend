@@ -114,7 +114,8 @@ export const GenerateVideoData = inngest.createFunction(
         video.audioUrl = audioUrl;
         video.captionJson = captionJson;
         video.images = images;
-        return video;
+        const savedVideo = await video.save();
+        return savedVideo;
       } catch (error) {
         return error?.message;
       }
