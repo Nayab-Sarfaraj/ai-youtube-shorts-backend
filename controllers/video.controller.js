@@ -35,11 +35,23 @@ export const generateVideoContent = async (req, res) => {
         .json({ success: false, message: "All fields are required" });
     const script = await getScript(prompt);
 
+    //  prompt: { type: String, required: true },
+    //   script: { type: String, required: true },
+    //   videoStyle: { type: String, required: true },
+    //   voice: { type: String, required: true },
+
+    const video = await Video.create({
+      prompt,
+      script,
+      videoStyle,
+      voice,
+      createdBy: userId,
+    });
     const result = await inngest.send({
       name: "generate-video-data",
-      data: { script, prompt, voice, videoStyle, userId },
+      data: { script, prompt, voice, videoStyle, userId, videoId: video._id },
     });
-    return res.status(200).json({ message: "ok", result });
+    return res.status(200).json({ message: "ok", result, videoId: video._id });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

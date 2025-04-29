@@ -29,7 +29,7 @@ export const GenerateVideoData = inngest.createFunction(
   { id: "generate-video-data" },
   { event: "generate-video-data" },
   async ({ event, step }) => {
-    const { script, prompt, voice, videoStyle, userId } = event?.data;
+    const { script, prompt, voice, videoStyle, userId, videoId } = event?.data;
 
     const GenerateAudioFile = await step.run("GenerateAudioFile", async () => {
       const result = await axios.post(
@@ -110,16 +110,10 @@ export const GenerateVideoData = inngest.createFunction(
         const audioUrl = GenerateAudioFile;
         const captionJson = GenerateCaption;
         const images = GenerateImages;
-        const video = await Video.create({
-          script,
-          prompt,
-          voice,
-          videoStyle,
-          createdBy: userId,
-          audioUrl,
-          captionJson,
-          images,
-        });
+        const video = await Video.findById(videoId);
+        video.audioUrl = audioUrl;
+        video.captionJson = captionJson;
+        video.images = images;
         return video;
       } catch (error) {
         return error?.message;
@@ -135,6 +129,7 @@ export const GenerateVideoData = inngest.createFunction(
       );
       video = await Video.findById(video._id);
       video.videoUrl = url;
+      video.status = "completed";
       await video.save();
       const user = await User.findById(video.createdBy);
       user.credits -= 1;
