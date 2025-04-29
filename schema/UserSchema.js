@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
@@ -21,12 +21,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       maxlength: 15,
     },
+    credits: {
+      type: Number,
+      default: 1,
+    },
   },
   {
     timestamps: true, // createdAt and updatedAt auto-managed
   }
 );
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

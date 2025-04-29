@@ -4,6 +4,7 @@ import { Inngest } from "inngest";
 import { GenerateImageScript } from "../config/geminiConfig.js";
 import Video from "../schema/videoSchema.js";
 import render_video from "../render.js";
+import User from "../schema/UserSchema.js";
 console.log(process.env.INNGEST_EVENT_KEY);
 export const inngest = new Inngest({
   id: "my-app",
@@ -135,6 +136,9 @@ export const GenerateVideoData = inngest.createFunction(
       video = await Video.findById(video._id);
       video.videoUrl = url;
       await video.save();
+      const user = await User.findById(video.createdBy);
+      user.credits -= 1;
+      await user.save();
 
       return video;
     });
