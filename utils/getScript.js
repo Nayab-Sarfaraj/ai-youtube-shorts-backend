@@ -3,16 +3,21 @@ import {
   generationConfig,
   model,
 } from "../config/geminiConfig.js";
-const SCRIPT_PROMPT = `write a  script for 30 Seconds video on Topic: {topic}.  
-• Give me response in JSON format and follow the schema  
+const SCRIPT_PROMPT = `Write a short, engaging story for a 30-second video on the topic: {topic}.  
+• Start with an attention-grabbing hook in the first line  
+• Include a twist, emotion, or surprising fact to keep viewers interested  
+• End with a thought-provoking or impactful line  
+• Do not use labels like "Scene", "Voiceover", or technical instructions  
+• Output only the story in this exact JSON format:
 
-{  
-  "scripts": [  
-    {  
-      "content": ""  
-    }  
-  ]  
+{
+  "scripts": [
+    {
+      "content": ""
+    }
+  ]
 }
+
 `;
 const getScript = async (prompt) => {
   const PROMPT = SCRIPT_PROMPT.replace("{topic}", prompt);

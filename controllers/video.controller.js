@@ -25,7 +25,7 @@ export const generateVideoContent = async (req, res) => {
   try {
     const { prompt, voice, videoStyle } = req.body;
     const userId = req.user._id;
-    if (req.user.credits)
+    if (req.user.credits < 0)
       return res
         .status(401)
         .json({ success: false, message: "Credit limit reached" });
