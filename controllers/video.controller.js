@@ -1,7 +1,7 @@
 import { inngest } from "../inngest/index.js";
 import Video from "../schema/videoSchema.js";
 import getScript from "../utils/getScript.js";
-import { script } from "../data.js";
+
 export const getVideoDetails = async (req, res) => {
   try {
     const id = req.params.id;
