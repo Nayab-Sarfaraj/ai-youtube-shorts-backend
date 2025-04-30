@@ -2,7 +2,7 @@
 
 import dotenv from "dotenv";
 dotenv.config();
-
+import { audioUrl, captionJson, images } from "./data.js";
 import ora from "ora";
 import {
   getFunctions,
@@ -13,7 +13,7 @@ import {
 const region = process.env.REGION;
 const serveUrl = process.env.SERVER_URL;
 
-const render_video = async (audioUrl, images, captionJson) => {
+const render_video = async () => {
   // Start spinner
   const spinner = ora("Starting render...").start();
 
@@ -84,5 +84,7 @@ const render_video = async (audioUrl, images, captionJson) => {
     return false;
   }
 };
+
+await render_video();
 
 export default render_video;

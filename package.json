@@ -20,6 +20,7 @@
     "@prisma/client": "^6.6.0",
     "@remotion/lambda": "^4.0.291",
     "@supabase/supabase-js": "^2.49.4",
+    "assemblyai": "^4.12.2",
     "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
@@ -32,9 +33,11 @@
     "inngest": "^3.34.4",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
+    "openai": "^4.96.2",
     "ora": "^8.2.0",
     "pg": "^8.14.1",
     "remotion": "^4.0.291",
+    "replicate": "^1.0.1",
     "together-ai": "^0.13.0"
   },
   "devDependencies": {
