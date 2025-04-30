@@ -50,10 +50,10 @@ export const GenerateVideoData = inngest.createFunction(
   { event: "generate-video-data" },
   async ({ event, step }) => {
     const { script, prompt, voice, videoStyle, userId, videoId } = event?.data;
-
+    if (!voice) voice = "21m00Tcm4TlvDq8ikWAM";
     const GenerateAudioFile = await step.run("GenerateAudioFile", async () => {
       const response = await axios.post(
-        `https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM`,
+        `https://api.elevenlabs.io/v1/text-to-speech/${voice}`,
         {
           text: script,
           model_id: "eleven_monolingual_v1",
