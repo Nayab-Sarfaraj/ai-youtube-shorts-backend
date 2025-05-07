@@ -28,7 +28,7 @@ app.use("/gen-script", async (req, res, next) => {
   try {
     const { prompt } = req.body;
     const result = await getScript(prompt);
-    return res.status(200).json({ success: false, script: result });
+    return res.status(200).json({ success: true, script: result });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

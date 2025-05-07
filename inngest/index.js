@@ -1,24 +1,19 @@
-import { createClient } from "@deepgram/sdk";
+import { AssemblyAI } from "assemblyai";
 import axios from "axios";
+import dotenv from "dotenv";
 import { Inngest } from "inngest";
+import OpenAI from "openai";
+import Replicate from "replicate";
 import { GenerateImageScript } from "../config/geminiConfig.js";
-import Video from "../schema/videoSchema.js";
 import render_video from "../render.js";
 import User from "../schema/UserSchema.js";
-import fs from "fs";
-import path from "path";
+import Video from "../schema/videoSchema.js";
 import UploadAudio from "../utils/UploadAudio.js";
-import OpenAI from "openai";
-import { AssemblyAI } from "assemblyai";
-import { model } from "mongoose";
-import Replicate from "replicate";
-import dotenv from "dotenv";
 dotenv.config();
 const assemblyClient = new AssemblyAI({
   apiKey: process.env.ASSEMBLY_AI_API_KEY,
 });
 
-// console.log(process.env.ASSEMBLY_AI_API_KEY);
 export const inngest = new Inngest({
   id: "my-app",
   eventKey: process.env.INNGEST_EVENT_KEY,
@@ -78,19 +73,6 @@ export const GenerateVideoData = inngest.createFunction(
     });
 
     const GenerateCaption = await step.run("GenerateCaption", async () => {
-      //   // const deepgram = createClient(process.env.DEEPGRAM_API_KEY);
-      //   // const { result, error } = await deepgram.listen.prerecorded.transcribeUrl(
-      //   //   {
-      //   //     url: "https://vcxubocrekxvkwwbuqgx.supabase.co/storage/v1/object/public/ai-youtube/public/1745994830276.mp3",
-      //   //   },
-
-      //   //   {
-      //   //     model: "nova-3",
-      //   //   }
-      //   // );
-      //   // if (error) console.log(error);
-      //   // console.log(result);
-      //   // return result?.results?.channels[0]?.alternatives[0].words;
       const params = {
         audio: GenerateAudioFile,
         speech_model: "universal",
@@ -117,25 +99,6 @@ export const GenerateVideoData = inngest.createFunction(
       let images = [];
       images = await Promise.all(
         GenerateImagePrompt.map(async (ele) => {
-          // const result = await axios.post(
-          //   BASE_URL + "/api/generate-image",
-          //   {
-          //     width: 1024,
-          //     height: 1024,
-          //     input: ele?.imagePrompt,
-          //     model: "sdxl", //'flux'
-          //     aspectRatio: "1:1", //Applicable to Flux model only
-          //   },
-          //   {
-          //     headers: {
-          //       "x-api-key": process.env.AI_GURU_LAB_API_KEY, // Your API Key
-          //       "Content-Type": "application/json",
-          //     },
-          //   }
-          // );
-          // console.log(result.data.image);
-          // return result.data.image;
-
           const response = await replicate.run(
             "black-forest-labs/flux-schnell",
             {
