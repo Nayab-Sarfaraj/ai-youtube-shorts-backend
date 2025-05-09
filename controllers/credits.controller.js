@@ -19,7 +19,7 @@ export const grantCredit = async (req, res) => {
         user.credits += creditsToGrant;
         await user.save();
 
-        return res.status(200).json({ success: true, message: `${creditsToGrant} credits granted.` });
+        return res.status(200).json({ success: true, user, message: `${creditsToGrant} credits granted.` });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
