@@ -36,11 +36,6 @@ export const generateVideoContent = async (req, res) => {
         .json({ success: false, message: "All fields are required" });
     const script = await getScript(prompt);
 
-    //  prompt: { type: String, required: true },
-    //   script: { type: String, required: true },
-    //   videoStyle: { type: String, required: true },
-    //   voice: { type: String, required: true },
-
     const video = await Video.create({
       prompt,
       script,

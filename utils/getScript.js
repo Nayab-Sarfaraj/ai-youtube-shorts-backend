@@ -20,13 +20,18 @@ const SCRIPT_PROMPT = `Write a short, engaging story for a 60-second video on th
 
 `;
 const getScript = async (prompt) => {
-  const PROMPT = SCRIPT_PROMPT.replace("{topic}", prompt);
-  const result = await generateScript.sendMessage(PROMPT);
-  let resp = result?.response?.text();
-  resp = JSON.parse(resp);
-  console.log(resp.scripts[0].content);
+  try {
+    const PROMPT = SCRIPT_PROMPT.replace("{topic}", prompt);
+    const result = await generateScript.sendMessage(PROMPT);
+    let resp = result?.response?.text();
+    resp = JSON.parse(resp);
+    console.log(resp.scripts[0].content);
 
-  return resp.scripts[0].content;
+    return resp.scripts[0].content;
+  } catch (error) {
+    await sendErrorToDiscord(error.stack || error.message);
+    throw new Error(error);
+  }
 };
 
 export default getScript;

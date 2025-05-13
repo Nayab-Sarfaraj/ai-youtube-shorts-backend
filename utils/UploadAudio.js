@@ -15,9 +15,9 @@ const UploadAudio = async (buffer) => {
         upsert: false, // Set to true if you want to overwrite existing files with the same name
       });
     if (error) console.log(error);
-    console.log(data);
+
     const imageUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/${data.fullPath}`;
-    console.log(imageUrl);
+
     return imageUrl;
   } catch (error) {
     console.log("ERROR UPLOADING ON SUPERBASE");

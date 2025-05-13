@@ -8,9 +8,11 @@ import apiRoutes from "./routes/api.js";
 import getScript from "./utils/getScript.js";
 
 import cookieParser from "cookie-parser";
+
 dotenv.config();
 const app = express();
 dbConnect();
+
 app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -24,19 +26,19 @@ app.use(
   })
 );
 
-app.use("/gen-script", async (req, res, next) => {
-  try {
-    const { prompt } = req.body;
-    const result = await getScript(prompt);
-    return res.status(200).json({ success: true, script: result });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-});
+// app.use("/gen-script", async (req, res, next) => {
+//   try {
+//     const { prompt } = req.body;
+//     const result = await getScript(prompt);
+//     return res.status(200).json({ success: true, script: result });
+//   } catch (error) {
+//     return res.status(500).json({ error: error.message });
+//   }
+// });
 
 app.use("/api", apiRoutes);
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   res.send("API is running...");
 });
 

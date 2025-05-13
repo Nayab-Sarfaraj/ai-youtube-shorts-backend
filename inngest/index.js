@@ -9,6 +9,7 @@ import render_video from "../render.js";
 import User from "../schema/UserSchema.js";
 import Video from "../schema/videoSchema.js";
 import UploadAudio from "../utils/UploadAudio.js";
+import sendErrorToDiscord from "../config/discordConfig.js";
 dotenv.config();
 const assemblyClient = new AssemblyAI({
   apiKey: process.env.ASSEMBLY_AI_API_KEY,
@@ -45,87 +46,109 @@ export const GenerateVideoData = inngest.createFunction(
   { event: "generate-video-data" },
   async ({ event, step }) => {
     const { script, prompt, voice, videoStyle, userId, videoId } = event?.data;
+
     if (!voice) voice = "21m00Tcm4TlvDq8ikWAM";
+
     const GenerateAudioFile = await step.run("GenerateAudioFile", async () => {
-      const response = await axios.post(
-        `https://api.elevenlabs.io/v1/text-to-speech/${voice}`,
-        {
-          text: script,
-          model_id: "eleven_monolingual_v1",
-          voice_settings: {
-            stability: 0.75,
-            similarity_boost: 0.75,
+      try {
+        const response = await axios.post(
+          `https://api.elevenlabs.io/v1/text-to-speech/${voice}`,
+          {
+            text: script,
+            model_id: "eleven_monolingual_v1",
+            voice_settings: {
+              stability: 0.75,
+              similarity_boost: 0.75,
+            },
           },
-        },
-        {
-          responseType: "arraybuffer",
-          headers: {
-            "xi-api-key": process.env.ELEVEN_LABS,
-            "Content-Type": "application/json",
-            Accept: "audio/mpeg",
-          },
-        }
-      );
-      console.log(response.data);
-      const audioBuffer = Buffer.from(response.data);
-      const url = await UploadAudio(audioBuffer);
-      return url;
+          {
+            responseType: "arraybuffer",
+            headers: {
+              "xi-api-key": process.env.ELEVEN_LABS,
+              "Content-Type": "application/json",
+              Accept: "audio/mpeg",
+            },
+          }
+        );
+
+        const audioBuffer = Buffer.from(response.data);
+        const url = await UploadAudio(audioBuffer);
+
+        return url;
+      } catch (error) {
+        await sendErrorToDiscord(error.stack || error.message);
+        throw new Error(error);
+      }
     });
 
     const GenerateCaption = await step.run("GenerateCaption", async () => {
-      const params = {
-        audio: GenerateAudioFile,
-        speech_model: "universal",
-      };
-      const transcript = await assemblyClient.transcripts.transcribe(params);
+      try {
+        const params = {
+          audio: GenerateAudioFile,
+          speech_model: "universal",
+        };
+        const transcript = await assemblyClient.transcripts.transcribe(params);
 
-      console.log(transcript);
-      return transcript.words;
+        return transcript.words;
+      } catch (error) {
+        await sendErrorToDiscord(error.stack || error.message);
+        throw new Error(error);
+      }
     });
 
     const GenerateImagePrompt = await step.run(
       "GenerateImagePrompt",
       async () => {
-        const FINAL_PROMPT = ImagePromptScript.replace(
-          "{script}",
-          script
-        ).replace("{style}", videoStyle);
-        const result = await GenerateImageScript.sendMessage(FINAL_PROMPT);
-        const resp = JSON.parse(result.response.text());
-        return resp;
+        try {
+          const FINAL_PROMPT = ImagePromptScript.replace(
+            "{script}",
+            script
+          ).replace("{style}", videoStyle);
+          const result = await GenerateImageScript.sendMessage(FINAL_PROMPT);
+          const resp = JSON.parse(result.response.text());
+          return resp;
+        } catch (error) {
+          await sendErrorToDiscord(error.stack || error.message);
+          throw new Error(error);
+        }
       }
     );
     const GenerateImages = await step.run("GenerateImages", async () => {
-      let images = [];
-      images = await Promise.all(
-        GenerateImagePrompt.map(async (ele) => {
-          const response = await replicate.run(
-            "black-forest-labs/flux-schnell",
-            {
-              input: {
-                prompt: ele?.imagePrompt,
+      try {
+        let images = [];
+        images = await Promise.all(
+          GenerateImagePrompt.map(async (ele) => {
+            const response = await replicate.run(
+              "black-forest-labs/flux-schnell",
+              {
+                input: {
+                  prompt: ele?.imagePrompt,
 
-                num_inference_steps: 4,
-              },
+                  num_inference_steps: 4,
+                },
+              }
+            );
+
+            const imageStream = response[0];
+
+            // Convert the ReadableStream into a Buffer (array of bytes)
+            const buffers = [];
+            for await (const chunk of imageStream) {
+              buffers.push(chunk);
             }
-          );
 
-          const imageStream = response[0];
+            const buffer = Buffer.concat(buffers);
+            const url = await UploadAudio(buffer);
 
-          // Convert the ReadableStream into a Buffer (array of bytes)
-          const buffers = [];
-          for await (const chunk of imageStream) {
-            buffers.push(chunk);
-          }
-          console.log(buffers);
-          const buffer = Buffer.concat(buffers);
-          const url = await UploadAudio(buffer);
-          console.log(url);
-          return url;
-        })
-      );
+            return url;
+          })
+        );
 
-      return images;
+        return images;
+      } catch (error) {
+        await sendErrorToDiscord(error.stack || error.message);
+        throw new Error(error);
+      }
     });
 
     const saveInDB = await step.run("saveInDB", async () => {
@@ -140,29 +163,35 @@ export const GenerateVideoData = inngest.createFunction(
         const savedVideo = await video.save();
         return savedVideo;
       } catch (error) {
-        return error?.message;
+        await sendErrorToDiscord(error.stack || error.message);
+        throw new Error(error);
       }
     });
 
     const renderVideo = step.run("renderVideo", async () => {
-      let video = saveInDB;
-      const url = await render_video(
-        video.audioUrl,
-        video.images,
-        video.captionJson
-      );
-      video = await Video.findById(video._id);
-      video.videoUrl = url;
-      video.status = "completed";
-      await video.save();
-      const user = await User.findById(video.createdBy);
-      user.credits -= 1;
-      await user.save();
+      try {
+        let video = saveInDB;
+        const url = await render_video(
+          video.audioUrl,
+          video.images,
+          video.captionJson
+        );
+        video = await Video.findById(video._id);
+        video.videoUrl = url;
+        video.status = "completed";
+        await video.save();
+        const user = await User.findById(video.createdBy);
+        user.credits -= 1;
+        await user.save();
 
-      return video;
+        return video;
+      } catch (error) {
+        await sendErrorToDiscord(error.stack || error.message);
+        throw new Error(error);
+      }
     });
 
-    return renderVideo;
+    return "executed";
   }
 );
 
