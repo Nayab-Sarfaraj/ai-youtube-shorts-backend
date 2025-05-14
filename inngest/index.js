@@ -191,7 +191,7 @@ export const GenerateVideoData = inngest.createFunction(
       }
     });
 
-    return "executed";
+    return renderVideo;
   }
 );
 
