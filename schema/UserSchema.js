@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 3,
     },
+    expoPushToken: {
+      type: String,
+    },
   },
   {
     timestamps: true, // createdAt and updatedAt auto-managed

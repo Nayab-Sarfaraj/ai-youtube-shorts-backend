@@ -71,3 +71,25 @@ export const getMe = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const updatePushToken = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const userId = req.user._id;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { expoPushToken: token },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, user: updatedUser, message: "Push token updated" });
+  } catch (error) {
+    console.error("Failed to update push token:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
