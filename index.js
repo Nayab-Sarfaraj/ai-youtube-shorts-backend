@@ -5,10 +5,8 @@ import { serve } from "inngest/express";
 import dbConnect from "./config/db.js";
 import { functions, inngest } from "./inngest/index.js";
 import apiRoutes from "./routes/api.js";
-import getScript from "./utils/getScript.js";
 
 import cookieParser from "cookie-parser";
-
 dotenv.config();
 const app = express();
 dbConnect();

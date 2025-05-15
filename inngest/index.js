@@ -10,6 +10,7 @@ import User from "../schema/UserSchema.js";
 import Video from "../schema/videoSchema.js";
 import UploadAudio from "../utils/UploadAudio.js";
 import sendErrorToDiscord from "../config/discordConfig.js";
+import { sendNotificationToDevice } from "../utils/notification.js";
 dotenv.config();
 const assemblyClient = new AssemblyAI({
   apiKey: process.env.ASSEMBLY_AI_API_KEY,
@@ -183,7 +184,7 @@ export const GenerateVideoData = inngest.createFunction(
         const user = await User.findById(video.createdBy);
         user.credits -= 1;
         await user.save();
-
+        await sendNotificationToDevice();
         return video;
       } catch (error) {
         await sendErrorToDiscord(error.stack || error.message);
