@@ -22,11 +22,9 @@ Backend service for **Auto AI Shorts** – an automated AI-powered pipeline that
 
 <div align="center">
 
-**Demo Video**
+**Demo Video** – click to watch
 
-<video src="https://gjgngvgeodcchvlqdbui.supabase.co/storage/v1/object/public/pixlai-assets/WhatsApp%20Video%202026-05-19%20at%208.45.48%20PM.mp4" controls width="600">
-  <a href="https://gjgngvgeodcchvlqdbui.supabase.co/storage/v1/object/public/pixlai-assets/WhatsApp%20Video%202026-05-19%20at%208.45.48%20PM.mp4">Watch the demo video</a>
-</video>
+[![Demo Video](https://img.shields.io/badge/▶%20Watch%20Demo-Video-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://gjgngvgeodcchvlqdbui.supabase.co/storage/v1/object/public/pixlai-assets/WhatsApp%20Video%202026-05-19%20at%208.45.48%20PM.mp4)
 
 </div>
 
