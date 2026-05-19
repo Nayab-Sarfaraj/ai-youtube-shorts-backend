@@ -14,6 +14,24 @@ Backend service for **Auto AI Shorts** – an automated AI-powered pipeline that
 
 ---
 
+### App Demo
+
+| App Demo | Demo Video |
+|:---:|:---:|
+| [![View on LinkedIn](https://img.shields.io/badge/View%20on-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/feed/update/urn:li:activity:7323445647888543745/) | See below ↓ |
+
+<div align="center">
+
+**Demo Video**
+
+<video src="https://gjgngvgeodcchvlqdbui.supabase.co/storage/v1/object/public/pixlai-assets/WhatsApp%20Video%202026-05-19%20at%208.45.48%20PM.mp4" controls width="600">
+  <a href="https://gjgngvgeodcchvlqdbui.supabase.co/storage/v1/object/public/pixlai-assets/WhatsApp%20Video%202026-05-19%20at%208.45.48%20PM.mp4">Watch the demo video</a>
+</video>
+
+</div>
+
+---
+
 ### Project Overview
 
 **Auto AI Shorts Backend** is a production-style Node.js/Express API that orchestrates an end‑to‑end AI video generation workflow:
