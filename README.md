@@ -18,15 +18,7 @@ Backend service for **Auto AI Shorts** – an automated AI-powered pipeline that
 
 | App Demo | Demo Video |
 |:---:|:---:|
-| [![View on LinkedIn](https://img.shields.io/badge/View%20on-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/feed/update/urn:li:activity:7323445647888543745/) | See below ↓ |
-
-<div align="center">
-
-**Demo Video** – click to watch
-
-[![Demo Video](https://img.shields.io/badge/▶%20Watch%20Demo-Video-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://gjgngvgeodcchvlqdbui.supabase.co/storage/v1/object/public/pixlai-assets/WhatsApp%20Video%202026-05-19%20at%208.45.48%20PM.mp4)
-
-</div>
+| [![View on LinkedIn](https://img.shields.io/badge/View%20on-LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/feed/update/urn:li:activity:7323445647888543745/) | [![▶ Watch Demo](https://img.shields.io/badge/▶%20Watch%20Demo-Video-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://gjgngvgeodcchvlqdbui.supabase.co/storage/v1/object/public/pixlai-assets/WhatsApp%20Video%202026-05-19%20at%208.45.48%20PM.mp4) |
 
 ---
 
